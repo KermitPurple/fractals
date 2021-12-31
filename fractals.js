@@ -142,8 +142,8 @@ class HilbertCurve{
 }
 
 let fractals = [
-    // SquareFractal,
-    // SierpinskiTriangle,
-    // FractalTree,
+    SquareFractal,
+    SierpinskiTriangle,
+    FractalTree,
     HilbertCurve,
 ];
