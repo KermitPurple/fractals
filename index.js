@@ -3,8 +3,8 @@ let fractal;
 
 function setup(){
     createCanvas(windowWidth, windowHeight);
-    stroke(255);
     noFill();
+    stroke(255);
     rectMode(CORNER);
     get_next_fractal();
     noLoop();

@@ -1,3 +1,7 @@
+function distance(a, b){
+    return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+}
+
 class SquareFractal{
     draw_square(x, y, size){
         rect(x, y, size, size);
@@ -17,10 +21,6 @@ class SquareFractal{
 }
 
 class SierpinskiTriangle{
-    distance(a, b){
-        return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
-    }
-
     get_midpoint(a, b){
         return createVector((a.x + b.x) / 2, (a.y + b.y) / 2);
     }
@@ -34,7 +34,7 @@ class SierpinskiTriangle{
             points[2].x,
             points[2].y,
         );
-        let d = this.distance(points[0], points[1]);
+        let d = distance(points[0], points[1]);
         if(d <= 5)
             return;
         this.draw_triangle([
@@ -89,8 +89,61 @@ class FractalTree{
     }
 }
 
+class HilbertCurve{
+    SCALING_FACTOR = 2.2;
+
+    rotate_around(pos, origin, theta){
+        let diff = pos.copy().sub(origin);
+        return createVector(
+            diff.x * Math.cos(theta) - diff.y * Math.sin(theta),
+            diff.y * Math.cos(theta) + diff.x * Math.sin(theta)
+        ).add(origin);
+    }
+
+    draw_curve(points){
+        let dist = distance(points[0], points[1]);
+        let new_dist = dist / this.SCALING_FACTOR
+        if(dist <= 5){
+            beginShape();
+            for(point of points)
+                vertex(point.x, point.y);
+            endShape();
+            return
+        }
+        let scaled = points.map(val => createVector(
+            val.x / this.SCALING_FACTOR,
+            val.y / this.SCALING_FACTOR
+        ));
+        let size = distance(scaled[0], scaled[scaled.length - 1]);
+        let pad = size + new_dist
+        let translate = (new_dist / 2 - (pad + new_dist) / 2);
+        this.draw_curve([
+            ...scaled.map(x => this.rotate_around(x, createVector(0, 0), -HALF_PI)
+                .add(createVector(0, -pad))
+            ),
+            ...[...scaled].reverse(),
+            ...[...scaled].reverse().map(x => x.copy().add(createVector(pad, 0))),
+            ...[...scaled].map(x => this.rotate_around(x.copy(), createVector(0, 0), HALF_PI)
+                .add(createVector(pad, -pad)))
+        ].map(x => x.copy().add(createVector(translate, -translate)))
+            .reverse()
+        );
+    }
+
+    draw(){
+        let half = min(windowWidth, windowHeight) / 2;
+        this.draw_curve([
+            createVector(half, -half),
+            createVector(half, half),
+            createVector(-half, half),
+            createVector(-half, -half),
+        ]);
+    }
+}
+
 let fractals = [
-    SquareFractal,
-    SierpinskiTriangle,
-    FractalTree,
+    // SquareFractal,
+    // SierpinskiTriangle,
+    // FractalTree,
+    HilbertCurve,
 ];
