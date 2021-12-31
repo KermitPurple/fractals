@@ -7,18 +7,19 @@ function setup(){
     noFill();
     rectMode(CORNER);
     get_next_fractal();
+    noLoop();
 }
 
 function windowResized(){
     resizeCanvas(windowWidth, windowHeight);
-    draw();
+    redraw();
 }
 
 function keyPressed(){
     switch(keyCode){
         case 32: // space
             get_next_fractal();
-            draw();
+            redraw();
             break;
     }
 }
