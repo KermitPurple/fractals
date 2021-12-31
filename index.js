@@ -3,7 +3,6 @@ let fractal;
 
 function setup(){
     createCanvas(windowWidth, windowHeight);
-    noLoop();
     stroke(255);
     noFill();
     rectMode(CORNER);
@@ -25,11 +24,9 @@ function keyPressed(){
 }
 
 function draw(){
-    push();
     translate(windowWidth / 2, windowHeight / 2);
     background(0);
     fractal.draw();
-    pop();
 }
 
 function get_next_fractal(){
