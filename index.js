@@ -12,7 +12,6 @@ function setup(){
 
 function windowResized(){
     resizeCanvas(windowWidth, windowHeight);
-    redraw();
 }
 
 function keyPressed(){

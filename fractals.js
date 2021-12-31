@@ -63,7 +63,34 @@ class SierpinskiTriangle{
     }
 }
 
+class FractalTree{
+    draw_tree(pos, len, theta = HALF_PI){
+        if(len <= 1)
+            return
+        let new_pos = createVector(
+            pos.x - len * Math.cos(theta),
+            pos.y - len * Math.sin(theta)
+        );
+        line(
+            pos.x,
+            pos.y,
+            new_pos.x,
+            new_pos.y
+        );
+        this.draw_tree(new_pos, len / 2, HALF_PI + QUARTER_PI);
+        this.draw_tree(new_pos, len / 2, HALF_PI - QUARTER_PI);
+    }
+
+    draw(){
+        this.draw_tree(
+            createVector(0, windowHeight / 2),
+            windowHeight / 1.9
+        );
+    }
+}
+
 let fractals = [
     SquareFractal,
     SierpinskiTriangle,
+    FractalTree,
 ];
