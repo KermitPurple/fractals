@@ -166,24 +166,23 @@ class KochSnowflake{
             one_third,
             new_point,
             two_third,
-            b
         ];
     }
 
     draw_triangle(points){
         let len = distance(points[0], points[1]);
-        let new_points = [];
-        while(len > 5){
-            len /= 3;
-            let prev = points[points.length - 1];
-            for(let point of points){
-                new_points = [...new_points, ...this.get_more_points(prev, point)];
-                prev = point;
-            }
-            points = new_points;
-            new_points = [];
+        if(len <= 2){
+            this.draw_points(points);
+            return
         }
-        this.draw_points(points, true);
+        let new_points = [];
+        let prev = points[points.length - 1];
+        for(let point of points){
+            new_points = [...new_points, ...this.get_more_points(prev, point)];
+            prev = point;
+        }
+        print(new_points);
+        this.draw_triangle(new_points);
     }
     
     draw_points(points, close = false){
