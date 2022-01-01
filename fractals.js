@@ -105,7 +105,7 @@ class HilbertCurve{
         let new_dist = dist / this.SCALING_FACTOR
         if(dist <= 5){
             beginShape();
-            for(point of points)
+            for(let point of points)
                 vertex(point.x, point.y);
             endShape();
             return
@@ -141,9 +141,83 @@ class HilbertCurve{
     }
 }
 
+class KochSnowflake{
+    get_more_points(a, b){
+        let theta = b.copy().sub(a).heading();
+        let new_len = distance(a, b) / 3;
+        let mid = createVector(
+            (a.x + b.x) / 2,
+            (a.y + b.y) / 2
+        );
+        let one_third = createVector(
+            (2 * a.x + b.x) / 3,
+            (2 * a.y + b.y) / 3
+        );
+        let two_third = createVector(
+            (a.x + 2 * b.x) / 3,
+            (a.y + 2 * b.y) / 3
+        );
+        let new_point = createVector(
+            one_third.x + Math.cos(-PI / 3 + theta) * new_len,
+            one_third.y + Math.sin(-PI / 3 + theta) * new_len
+        );
+        return [
+            a,
+            one_third,
+            new_point,
+            two_third,
+            b
+        ];
+    }
+
+    draw_triangle(points){
+        let len = distance(points[0], points[1]);
+        let new_points = [];
+        while(len > 5){
+            len /= 3;
+            let prev = points[points.length - 1];
+            for(let point of points){
+                new_points = [...new_points, ...this.get_more_points(prev, point)];
+                prev = point;
+            }
+            points = new_points;
+            new_points = [];
+        }
+        this.draw_points(points, true);
+    }
+    
+    draw_points(points, close = false){
+        beginShape();
+        for(let point of points)
+            vertex(point.x, point.y);
+        if(close)
+            endShape(CLOSE);
+        else
+            endShape();
+    }
+
+    get_triangle_points(theta_offset = -HALF_PI){
+        let points = [];
+        let r = min(windowWidth, windowHeight) / 2.1;
+        for(let i = 0; i < 3; i++){
+            let theta = theta_offset + i / 3 * TWO_PI;
+            points.push(createVector(
+                Math.cos(theta) * r,
+                Math.sin(theta) * r
+            ));
+        }
+        return points
+    }
+
+    draw(){
+        this.draw_triangle(this.get_triangle_points());
+    }
+}
+
 let fractals = [
     SquareFractal,
     SierpinskiTriangle,
     FractalTree,
     HilbertCurve,
+    KochSnowflake,
 ];
