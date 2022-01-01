@@ -181,7 +181,6 @@ class KochSnowflake{
             new_points = [...new_points, ...this.get_more_points(prev, point)];
             prev = point;
         }
-        print(new_points);
         this.draw_triangle(new_points);
     }
     
