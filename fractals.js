@@ -2,6 +2,21 @@ function distance(a, b){
     return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 }
 
+function draw_points(points, close = false){
+    if(points.length < 2){
+        return;
+    }
+    push();
+    for(let i = 1; i < points.length; i++){
+        stroke(i / points.length * 360, 100, 50);
+        line(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y);
+    }
+    if(close){
+        line(points[points.length - 1].x, points[points.length - 1].y, points[0].x, points[0].y);
+    }
+    pop();
+}
+
 class SquareFractal{
     draw_square(x, y, size){
         rect(x, y, size, size);
@@ -174,7 +189,7 @@ class KochSnowflake{
     draw_triangle(points){
         let len = distance(points[0], points[1]);
         if(len <= 2){
-            this.draw_points(points);
+            draw_points(points);
             return
         }
         let new_points = [];
@@ -186,16 +201,6 @@ class KochSnowflake{
         this.draw_triangle(new_points);
     }
     
-    draw_points(points, close = false){
-        beginShape();
-        for(let point of points)
-            vertex(point.x, point.y);
-        if(close)
-            endShape(CLOSE);
-        else
-            endShape();
-    }
-
     get_triangle_points(theta_offset = -HALF_PI){
         let points = [];
         let r = min(windowWidth, windowHeight) / 2.1;
