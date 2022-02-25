@@ -119,12 +119,7 @@ class HilbertCurve{
         let dist = distance(points[0], points[1]);
         let new_dist = dist / this.SCALING_FACTOR
         if(dist <= 5){
-            push();
-            for(let i = 1; i < points.length; i++){
-                stroke(i / points.length * 360, 100, 50);
-                line(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y);
-            }
-            pop();
+            draw_points(points);
             return
         }
         let scaled = points.map(val => createVector(
