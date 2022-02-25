@@ -6,6 +6,7 @@ function setup(){
     noFill();
     stroke(255);
     rectMode(CORNER);
+    colorMode(HSL);
     get_next_fractal();
     noLoop();
 }
